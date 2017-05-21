@@ -1,0 +1,17 @@
+---
+- name: Install Screen
+  apt: pkg=screen state=latest
+
+- name: Download Minecraft Server
+  get_url: url=https://s3.amazonaws.com/Minecraft.Download/versions/1.8.9/minecraft_server.1.8.9.jar
+           dest=/home/ubuntu/minecraft_server.jar
+
+- name: Download Minecraft Server
+  copy: src={{ item }} dest=/home/ubuntu/{{ item }} mode=0644
+  with_items:
+  - eula.txt
+  - admin.txt
+  - ops.txt
+
+- name: Start Minecraft Server
+  shell: screen -S "minecraft" -d -m bash -c 'java -Xmx2048M -Xms2048M -jar /home/ubuntu/minecraft_server.jar nogui'
